@@ -1,4 +1,5 @@
 import "./section-style.css";
+import "./section-queries.css";
 import object1 from "../../image/toilet-paper.png";
 import Intro from "./Intro-section";
 import How from "./How-section";
