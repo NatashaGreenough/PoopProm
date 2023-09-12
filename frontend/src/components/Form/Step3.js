@@ -1,10 +1,10 @@
 import React from "react";
-import Star from "../image/tick.png";
+import Tick from "../image/tick.png";
 
 export default function Step3() {
   return (
     <div className="submit-info-container">
-      <img src={Star} className="submit-icon" />
+      <img src={Tick} className="submit-icon" alt="Tick icon" />
       <h4>Submit your info</h4>
       <p className="submit-detail">
         Please review all the information you previously typed in the past

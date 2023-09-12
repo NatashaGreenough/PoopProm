@@ -1,86 +1,169 @@
-import React, { useState } from "react";
-import ToiletInfo from "./ToiletInfo";
-import SubmitInfo from "./SubmitInfo";
-import ToiletLocation from "./ToiletLocation";
+import React, { Component } from "react";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
 import "./form-style.css";
 
-export default function Form() {
-  const [page, setPage] = useState(0);
-  const [formData, setFormData] = useState({
-    toiletName: "",
-    location: "",
-    photo: "",
-    address: "",
-    district: "",
-    province: "",
-    zipCode: "",
-  });
-  const [choose, setChoose] = useState([
-    { id: 1, name: "Bidet spray", status: false },
-    { id: 2, name: "Squat toilet", status: false },
-    { id: 3, name: "Auto toilet", status: false },
-    { id: 4, name: "Handicap toilet", status: false },
-  ]);
+class Form extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 1,
+      formData: {
+        toiletName: "",
+        photo: "",
+        address: "",
+        district: "",
+        province: "",
+        zipCode: "",
+        toiletTypes: [
+          { id: 1, name: "Bidet spray", status: false },
+          { id: 2, name: "Squat toilet", status: false },
+          { id: 3, name: "Auto toilet", status: false },
+          { id: 4, name: "Handicap toilet", status: false },
+        ],
+      },
 
-  const FormTitles = ["Toilet details", "Toilet location", " "];
+      errors: {},
+      images: [],
+    };
+  }
+  handleRemoveImage = (index) => {
+    this.setState((prevState) => {
+      const updatedImages = [...prevState.formData.photo];
+      updatedImages.splice(index, 1); // Remove the image at the specified index
 
-  const PageDisplay = () => {
-    if (page === 0) {
-      return (
-        <ToiletInfo
-          formData={formData}
-          setFormData={setFormData}
-          choose={choose}
-          setChoose={setChoose}
-        />
-      );
-    } else if (page === 1) {
-      return <ToiletLocation formData={formData} setFormData={setFormData} />;
-    } else if (page === 2) {
-      return <SubmitInfo />;
+      return {
+        formData: {
+          ...prevState.formData,
+          photo: updatedImages.length > 0 ? updatedImages : "", // Set photo to "" if no images remain
+        },
+      };
+    });
+  };
+
+  handleImageUpload = (images) => {
+    if (images.length < 1) return;
+
+    const newImageURLs = [];
+    images.forEach((image) => newImageURLs.push(URL.createObjectURL(image)));
+
+    this.setState((prevState) => ({
+      formData: {
+        ...prevState.formData,
+        photo: newImageURLs,
+      },
+    }));
+  };
+
+  // Function to toggle the status of a toilet type
+  toggleToiletTypeStatus = (id) => {
+    this.setState((prevState) => {
+      const updatedToiletTypes = prevState.formData.toiletTypes.map((type) => {
+        if (type.id === id) {
+          return { ...type, status: !type.status };
+        }
+        return type;
+      });
+
+      return {
+        formData: {
+          ...prevState.formData,
+          toiletTypes: updatedToiletTypes,
+        },
+      };
+    });
+  };
+
+  // Function to handle form submission for each step
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { step, formData, images } = this.state;
+
+    // If the current step is the last step, you can submit the form data
+    if (step === 3) {
+      // Handle form submission or API request here
+      console.log("Form submitted:", formData);
+      console.log(images);
+    } else {
+      // Proceed to the next step
+      this.setState({ step: step + 1 });
     }
   };
 
-  return (
-    <div className="form">
-      <div className="form-container">
-        <div className="numbers">
-          <div className={page >= 0 ? "active" : ""}>1</div>
-          <div id="number-line" className={page >= 1 ? "active" : ""}></div>
-          <div className={page >= 1 ? "active" : ""}>2</div>
-          <div id="number-line" className={page >= 2 ? "active" : ""}></div>
-          <div className={page >= 2 ? "active" : ""}>3</div>
-        </div>
+  // Function to update form data when input fields change
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    const { formData } = this.state;
+    this.setState({ formData: { ...formData, [name]: value } });
+  };
 
-        <div className="header">
-          <h1>{FormTitles[page]}</h1>
-        </div>
-        <div className="body">{PageDisplay()}</div>
-        <div className="footer">
-          <button
-            className={page === 0 ? "hidden" : ""}
-            onClick={() => {
-              setPage((setPage) => setPage - 1);
-            }}
-          >
-            Prev
-          </button>
+  // Function to go to the previous step
+  goToPreviousStep = () => {
+    const { step } = this.state;
+    if (step > 1) {
+      this.setState({ step: step - 1 });
+    }
+  };
 
-          <button
-            onClick={() => {
-              if (page === FormTitles.length - 1) {
-                alert("FORM SUBMITTED");
-                console.log(formData);
-                console.log(choose);
-              } else {
-                setPage((setPage) => setPage + 1);
-              }
-            }}
-          >
-            {page === FormTitles.length - 1 ? "Submit" : "Next"}
-          </button>
+  render() {
+    const { step, formData } = this.state;
+    const FormTitles = ["Toilet details", "Toilet location", " "];
+    return (
+      <div className="form">
+        <div className="form-container">
+          <div className="numbers">
+            <div className={step >= 1 ? "active" : ""}>1</div>
+            <div id="number-line" className={step >= 2 ? "active" : ""}></div>
+            <div className={step >= 2 ? "active" : ""}>2</div>
+            <div id="number-line" className={step >= 3 ? "active" : ""}></div>
+            <div className={step >= 3 ? "active" : ""}>3</div>
+          </div>
+          <div className="header">
+            <h1>{FormTitles[step - 1]}</h1>
+          </div>
+          <form onSubmit={this.handleSubmit}>
+            {step === 1 && (
+              <Step1
+                formData={formData}
+                handleChange={this.handleInputChange}
+                toggleToiletTypeStatus={this.toggleToiletTypeStatus}
+                handleImageUpload={this.handleImageUpload}
+                handleRemoveImage={this.handleRemoveImage}
+              />
+            )}
+            {step === 2 && (
+              <Step2
+                formData={formData}
+                handleChange={this.handleInputChange}
+              />
+            )}
+            {step === 3 && <Step3 />}
+            <div className="footer">
+              <button
+                className={step === 1 ? "hidden" : ""}
+                type="button"
+                onClick={this.goToPreviousStep}
+              >
+                Previous
+              </button>
+
+              {step < 3 && (
+                <button className="btn" type="submit">
+                  Next
+                </button>
+              )}
+              {step === 3 && (
+                <button className="btn" type="submit">
+                  Submit
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
+
+export default Form;

@@ -1,11 +1,20 @@
-// Step1.js
 import React from "react";
 
 export default function Step1({
   formData,
   handleChange,
   toggleToiletTypeStatus,
+  handleImageUpload,
+  handleRemoveImage,
 }) {
+  const onImageChange = (e) => {
+    handleImageUpload([...e.target.files]);
+  };
+
+  const removeImage = (index) => {
+    handleRemoveImage(index);
+  };
+
   return (
     <div className="Toilet-info-container">
       <div>
@@ -19,17 +28,20 @@ export default function Step1({
         />
       </div>
       <div className="info-photo">
-        <h5>Photo (optional)</h5>
-
-        {formData.photo !== "" ? (
+        <label>Photo (optional)</label>
+        {Array.isArray(formData.photo) && formData.photo.length > 0 ? (
           <div className="img-box">
-            <img src={formData.photo} alt="inserted img" />
-            <button
-              className="close"
-              // onClick={() => setFormData({ ...formData, photo: "" })}
-            >
-              &times;
-            </button>
+            {formData.photo.map((imageURL, index) => (
+              <div key={index}>
+                <img src={imageURL} alt={`Inserted imag ${index}`} />
+                <button
+                  className="close"
+                  onClick={() => handleRemoveImage(index)}
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
           </div>
         ) : (
           <input
@@ -37,7 +49,7 @@ export default function Step1({
             type="file"
             multiple
             accept="image/*"
-            // onChange={onImageChange}
+            onChange={onImageChange}
           />
         )}
       </div>
@@ -55,7 +67,7 @@ export default function Step1({
                 checked={type.status}
                 onChange={() => toggleToiletTypeStatus(type.id)}
               />
-              <label>{type.name}</label>
+              <label className="choice-text">{type.name}</label>
             </div>
           ))}
         </div>
