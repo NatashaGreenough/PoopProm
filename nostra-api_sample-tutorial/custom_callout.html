@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Callout</title>
+    <style type="text/css">
+        body {
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        input[type="text"] {
+            width: 40px;
+        }
+
+        tr {
+            width: 100px;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        #map #map_layers #map_gc #map_graphics_layer {
+            display: none !important;
+        }
+
+        #div-block-setStyle-customCallout {
+            right: 20px;
+            top: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #2D2F37;
+            border-radius: 3px;
+            padding: 15px;
+            position: fixed;
+            width: 315px;
+            vertical-align: middle;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        #div-block-setStyle-customCallout-Panel {
+            border: solid 1px #FFD300;
+            padding: 5px;
+        }
+    </style>
+    <script type="text/javascript" src="//api.nostramap.com/nostraapi/v2.0?key=Gjtn7SIciJica9ypDXvueZChpod2CUpP8Cw2EOc4svdqgxS7Tx7OXiQlmR4p0U(fXcOqpjmZyV3xebKE9WxU520=====2"></script>
+    <script type="text/javascript">
+        var customCallout, map, lat, lon, gLayer;
+        var checkOnClickPin = false;
+        var lstLabel = [];
+        var arrCallout = [
+            {
+                lat: 13.73492,
+                lon: 100.57645,
+                content: "<div style=\"padding-bottom:15px; font-size:15px\"><strong>Samitvej Sukhumvit Hospital</strong></div><div style=\"padding-bottom:30px; height:65px;\"><div style=\"float:left; padding-top:15px; padding-right:10px; width:50%\">Address: 488 Srinakarin Rd. Khwaeng Suan Luang, Khet Suan Luang, Bangkok 10250</div><div><img src=\"https://s3-ap-southeast-1.amazonaws.com/svh-prd-uploads/wp-content/uploads/2014/07/sukhumvit1-1.jpg\" style=\"width:140px; height:85px;\"></div></div><div><hr><font color=\"#4E90E9\">Phone: 02 022 2222</font><br><font color=\"#51AC51\">Hours: Open today · Open 24 hours</font></div>",
+                width: 300,
+                height: 185,
+                color: "#FFDFBA",
+                fontSize: null,
+                fontColor: "#000000",
+                fontFamily: "Comic Sans MS",
+                showShadow: false,
+                label: "Samitvej Sukhumvit Hospital"
+            },
+            {
+                lat: 13.72080,
+                lon: 100.56901,
+                content: "<u>K Village</u><br><br>Address: 211-212 Sukhumvit 26 Alley, Khwaeng Khlong Tan, Khet Khlong Toei<br><br><font color=\"#30A22E\">Mon - Fri.   10.00 - 21.00<br>Sat - Sun  09.30 - 21.00</font><br><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-open-shop.png\" style=\"width:40px; height:35px;\">",
+                width: 175,
+                height: 183,
+                color: "#FFFFFF",
+                fontSize: null,
+                fontColor: "#000000",
+                fontFamily: "Comic Sans MS",
+                showShadow: true,
+                label: "K Village"
+            },
+            {
+                lat: 13.72833,
+                lon: 100.53709,
+                content: "<div>Dusit Thani Bangkok<br><hr></div><div>Website : <a target=\"_blank\" href=\"https://www.dusit.com/\">https://www.dusit.com</a>  <br>Phone :  02 200 9000<br><br><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"><br><hr></div><div><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-fork-and-knife.png\" style=\"width:23px; height:23px;\">     <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-cup.png\" style=\"width:26px; height:26px;\">     <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-car.png\" style=\"width:28px; height:28px;\">     <img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-bike.png\" style=\"width:30px; height:30px;\"></div>",
+                width: 203,
+                height: 158,
+                color: "#FFFFFF",
+                fontSize: null,
+                fontColor: "#000000",
+                fontFamily: "Comic Sans MS",
+                showShadow: true,
+                label: "Dusit Thani Hotel"
+            },
+            {
+                lat: 13.73043,
+                lon: 100.55757,
+                content: "<div style=\"padding-bottom:20px\"><u>Bencha Kiti Park</u></div><div style=\"padding-bottom: 10px\"><font color=\"#20A32A\">Nature & Parks</font></div><div style=\"padding-bottom:10px\"><div style=\"float:left; padding-right:40px\"><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-desktop-monitor.png\" style=\"width:20px; height:20px;\"> <a target=\"_blank\" href=\"https://www.google.co.th/search?q =%E0%B8%AA%E0%B8%A7%E0%B8%99%E0%B9%80%E0%B8%9A%E0%B8%8D%E0%B8%88%E0%B8%81%E0%B8%B4%E0%B8%95%E0%B8%B4&source =lnms&tbm =isch&sa =X&ved =0ahUKEwjlmPO8-93VAhUQSo8KHXHKBJ4Q_AUICigB&biw =1366&bih =613/\">Website</a></div><div><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-telephone.png\" style=\"width:20px; height:20px;\"> 02-258-9919</div></div><div style=\"padding-bottom:10px\"><img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-pin-orange.png\" style=\"width:25px; height:25px;\"> Ratchadapisek Road...</div><div><img src=\"http://office.bangkok.go.th/publicpark/images/parks/25/park25-01.jpg\" style=\"width:155px; height:90px;\">    <img src=\"http://office.bangkok.go.th/publicpark/images/parks/25/park25-06.jpg\" style=\"width:155px; height:90px;\"></div>",
+                width: 326,
+                height: 238,
+                color: "#FFFFFF",
+                fontSize: null,
+                fontColor: "#000000",
+                fontFamily: "Comic Sans MS",
+                showShadow: true,
+                label: "Bencha Kiti Park"
+            }
+        ];
+
+        nostra.onready = function () {
+            nostra.config.Language.setLanguage(nostra.language.E);
+            initialize();
+        }
+        function initialize() {
+            showLoading();
+            map = new nostra.maps.Map("map", {
+                id: "mapSample",
+                logo: true,
+                scalebar: true,
+                slider: true,
+                level: 14,
+                lat: 13.73343,
+                lon: 100.55857
+            });
+            map.events.load = function () {
+                gLayer = new nostra.maps.layers.GraphicsLayer(map);
+                map.addLayer(gLayer);
+                initPin();
+            };
+            map.events.click = function (e) {
+                lat = e.mapPoint.y;
+                lon = e.mapPoint.x;
+
+                var nostraCallout = new nostra.maps.CustomCallout({
+                    content: document.getElementById("txtbContent").value,
+                    width: document.getElementById("txtbWidth").value,
+                    height: document.getElementById("txtbHeight").value,
+                    color: document.getElementById("txtbCalloutColor").value,
+                    fontSize: document.getElementById("txtbFontSize").value,
+                    fontColor: document.getElementById("txtbFontColor").value,
+                    fontFamily: document.getElementById("txtbFontFamily").value,
+                    showShadow: document.getElementById("rdoShowShadow").checked
+                });
+                var nostraLabel = new nostra.maps.symbols.Label({
+                    text: "testLabel",
+                    size: "10",
+                    position: "top"
+                });
+                lstLabel.push(nostraLabel);
+
+                var markerPin = new nostra.maps.symbols.Marker({
+                    url: "", width: 60, height: 60,
+                    customCallout: nostraCallout,
+                    label: nostraLabel,
+                    draggable: true
+                });
+                var g = gLayer.addMarker(lat, lon, markerPin);
+            }
+
+            hideLoading();
+        }
+        function initPin() {
+            for (var i in arrCallout) {
+                var nostraCallout = new nostra.maps.CustomCallout({
+                    content: arrCallout[i].content,
+                    width: arrCallout[i].width,
+                    height: arrCallout[i].height,
+                    color: arrCallout[i].color,
+                    fontSize: arrCallout[i].fontSize,
+                    fontColor: arrCallout[i].fontColor,
+                    fontFamily: arrCallout[i].fontFamily,
+                    showShadow: arrCallout[i].showShadow
+                })
+
+                if (arrCallout[i].label) {
+                    var nostraLabel = new nostra.maps.symbols.Label({
+                        text: arrCallout[i].label,
+                        size: "10",
+                        position: "top"
+                    });
+                    lstLabel.push(nostraLabel);
+                }
+                else {
+                    var nostraLabel = null;
+                }
+            
+                var markerPin = new nostra.maps.symbols.Marker({
+                    url: "", width: 60, height: 60,
+                    customCallout: nostraCallout,
+                    label: nostraLabel,
+                    draggable: true
+                });
+                gLayer.addMarker(arrCallout[i].lat, arrCallout[i].lon, markerPin);
+            }
+            gLayer.showAllCustomCallout();
+        }
+        function clearGraphic() {
+            gLayer.hideAllCustomCallout();
+            gLayer.clear();
+        }
+        function showAllCallout() {
+            gLayer.showAllCustomCallout();
+        }
+        function hideAllCallout() {
+            gLayer.hideAllCustomCallout();
+        }
+        function showAllLabel() {
+            for (var i = 0; i < lstLabel.length; i++) {
+                gLayer.showLabel(lstLabel[i]);
+            }
+        }
+        function hideAllLabel() {
+            for (var i = 0; i < lstLabel.length; i++) {
+                gLayer.hideLabel(lstLabel[i]);
+            }
+        }
+        function showLoading() {
+            document.getElementById("dlgLoading").style.display = "block";
+        }
+        function hideLoading() {
+            document.getElementById("dlgLoading").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <div id="dlgLoading" class="loadingWidget"></div>
+    <div id="map"></div>
+    <div id="div-block-setStyle-customCallout">
+        Set Style Custom Callout
+        <div id="div-block-setStyle-customCallout-Panel">
+            <table>
+                <tr>
+                    <td>Content : </td>
+                    <td><input id="txtbContent" value="POI_NAME: Nostra <br/>ROAD: นราธิวาสราชนครินทร์"></input></td>
+                </tr>
+                <tr>
+                    <td>Width : </td>
+                    <td><input id="txtbWidth" value="200"></input></td>
+                </tr>
+                <tr>
+                    <td>Height : </td>
+                    <td><input id="txtbHeight" value="60"></input></td>
+                </tr>
+                <tr>
+                    <td>Color : </td>
+                    <td><input id="txtbCalloutColor" value="#FFFFFF"></input></td>
+                </tr>
+                <tr>
+                    <td>Font Size : </td>
+                    <td><input id="txtbFontSize" value="13"></input></td>
+                </tr>
+                <tr>
+                    <td>Font Color : </td>
+                    <td><input id="txtbFontColor" value="#000000"></input></td>
+                </tr>
+                <tr>
+                    <td>Font Family : </td>
+                    <td><input id="txtbFontFamily" value="Helvetica"></input></td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        <label>Show Shadow : </label>
+                    </td>
+                    <td>
+                        <input id="rdoShowShadow" style="margin: 5px;" type="radio" name="showShadow" value="true" checked>True</input>
+                        <input id="rdoHideShadow" style="margin: 5px;" type="radio" name="showShadow" value="false">False</input>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-top:10px;">
+            <table>
+                <tr>
+                    <td width="155">
+                        <label>Display Custom Callout: </label>
+                    </td>
+                    <td>
+                        <button id="btnshowAll" style="width:75px" class="btnhide" onclick="showAllCallout();">Show All</button>
+                        <button id="btnhideAll" style="width:70px" class="btnhide" onclick="hideAllCallout();">Hide All</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="155">
+                        <label>Display Label: </label>
+                    </td>
+                    <td>
+                        <button id="btnshowAll" style="width:75px" class="btnhide" onclick="showAllLabel();">Show All</button>
+                        <button id="btnhideAll" style="width:70px" class="btnhide" onclick="hideAllLabel();">Hide All</button>
+                    </td>
+                </tr>
+            </table>
+            <button id="btnClear" style="width:130px" class="btnAdd" onclick="clearGraphic();">Clear Graphic</button>
+        </div>
+        <div style="margin-top:10px;" id="txtLabel">
+            Please click on the map to add point and click on marker again to display custom callout
+        </div>
+    </div>
+</body>
+</html>
