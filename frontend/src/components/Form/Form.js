@@ -4,6 +4,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import "./form-style.css";
 import "./queries.css";
+import axios from "axios";
 
 class Form extends Component {
   constructor(props) {
@@ -86,6 +87,9 @@ class Form extends Component {
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
+
+      axios.post("http://localhost:5000/submit", formData);
+
     } else {
       // Proceed to the next step
       this.setState({ step: step + 1 });
