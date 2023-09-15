@@ -5,8 +5,15 @@ import Intro from "./Intro-section";
 import How from "./How-section";
 import Features from "./Features-section";
 import Footer from "./Footer";
+import { useNavigate } from 'react-router-dom';
 
 export default function Section() {
+  const navigate = useNavigate();
+
+  const LinktoShare = () => {
+    navigate('/share');
+  };
+
   return (
     <>
       <div className="hero-section">
@@ -16,7 +23,7 @@ export default function Section() {
         </h1>
         <div className="hero-btn-box">
           <button className="hero-btn mr">Find</button>
-          <button className="hero-btn share">Share</button>
+          <button onClick = {LinktoShare} className="hero-btn share">Share</button>
         </div>
       </div>
 
