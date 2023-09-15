@@ -77,65 +77,44 @@
     <script type="text/javascript" src="//api.nostramap.com/nostraapi/v2.0?key=Gjtn7SIciJica9ypDXvueZChpod2CUpP8Cw2EOc4svdqgxS7Tx7OXiQlmR4p0U(fXcOqpjmZyV3xebKE9WxU520=====2"></script>
 
     <script type="text/javascript">
-        var initExtent, map, point, lat, lon;
-        var lineLayer, polygonLayer, pointLayer, mp;
-        var prePointLayer, prePolygonLayer;
-        var currentType = "point";
-        var points = [];
-        var lstLabel = [];
-        var isFirstLoad = true;
+        var map, pointLayer;
 
         nostra.onready = function () {
             initialize();
         };
-
+    
         function initialize() {
-
             map = new nostra.maps.Map("map", {
                 id: "mapTest",
                 logo: true,
                 scalebar: true,
-                slider: false,
+                slider: true,
                 level: 18,
                 lat: 13.722944,
                 lon: 100.530449
             });
-
-            var data = [
-                {
-                    name: "AREA:A",
-                    lat: 13.722944,
-                    lon: 100.530449
-                },
-                {
-                    name: "AREA:b",
-                    lat: 13.765273,
-                    lon: 100.530449
-                }
-            ]
-
+    
             pointLayer = new nostra.maps.layers.GraphicsLayer(map, { id: "pointLayer", mouseOver: false });
             map.addLayer(pointLayer);
-
-            for (item in data) {
-
-                let nostraCallout = new nostra.maps.Callout({ title: data[item].name, content: "" });
-
-                let nostraLabel = new nostra.maps.symbols.Label({
-                    text: data[item].name,
-                    size: "12",
-                    position: "top",
-                    color: "#434343",
-                    haloColor: "#ffffff",
-                    haloSize: "1",
-                    xoffset: "0",
-                    yoffset: "0"
+    
+            // Load JSON data from an external file (replace 'data.json' with your file path)
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Process the JSON data and add markers to the map
+                    data.forEach(item => {
+                        addMarker(item.latitude, item.longitude, item.title, item.description);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading JSON data:', error);
                 });
-
-                let pointMarker = new nostra.maps.symbols.Marker({ url: "", width: 60, height: 60, attributes: { POI_NAME: "TestAttr", POI_ROAD: "TestAttr" }, callout: nostraCallout, label: nostraLabel });
-
-                pointLayer.addMarker(data[item].lat, data[item].lon, pointMarker);
-            }
+        }
+    
+        function addMarker(latitude, longitude, title, description) {
+            var nostraCallout = new nostra.maps.Callout({ title: title, content: description });
+            var pointMarker = new nostra.maps.symbols.Marker({ url: '', width: 60, height: 60, callout: nostraCallout });
+            pointLayer.addMarker(latitude, longitude, pointMarker);
         }
     </script>
 </head>
