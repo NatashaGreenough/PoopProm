@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Address Search Sample</title>
+    <style type="text/css">
+        body {
+        font-family: sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .loadingWidget {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: White url('https://developer.nostramap.com/developer/V2/images/loader.gif') no-repeat fixed center center;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            z-index: 10000;
+            vertical-align: middle;
+            top: 0px;
+            left: 0px;
+        }
+
+        .search-row {
+            display: table-row;
+        }
+
+        .search-cell {
+            display: table-cell;
+            padding: 2px;
+            text-align: left;
+        }
+
+        .cell {
+            text-align: left;
+        }
+
+        .stage-value {
+            float: left;
+            background: #fff;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            border: 1px solid #adadad;
+            margin-right: 10px;
+            width: 50px;
+            text-align: center;
+            font: 13.3333px Arial;
+        }
+
+        #divSearchKey {
+            right: 20px;
+            top: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #2D2F37;
+            border-radius: 3px;
+            padding: 10px;
+            position: fixed;
+            vertical-align: middle;
+            display: table;
+        }
+
+        #autocomplete {
+            right: 20px;
+            top: 270px;
+            background-color: #FFFFFF;
+            border: 1px solid #2D2F37;
+            border-radius: 3px;
+            height: 300px;
+            padding: 10px;
+            position: fixed;
+            width: 372px;
+            overflow: auto;
+            vertical-align: middle;
+            display: none;
+        }
+
+            #autocomplete > div {
+                margin: 0 10px 0px;
+                cursor: pointer;
+            }
+
+
+        #result {
+            left: 20px;
+            top: 100px;
+            background-color: #FFFFFF;
+            border: 1px solid #2D2F37;
+            border-radius: 3px;
+            height: 300px;
+            padding: 10px;
+            position: fixed;
+            width: 500px;
+            overflow: auto;
+            vertical-align: middle;
+        }
+
+        #result > div {
+            margin: 10px 0 0;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="//api.nostramap.com/nostraapi/v2.0?key=Gjtn7SIciJica9ypDXvueZChpod2CUpP8Cw2EOc4svdqgxS7Tx7OXiQlmR4p0U(fXcOqpjmZyV3xebKE9WxU520=====2"></script>
+    <script type="text/javascript">
+        var map;
+
+        nostra.onready = function () {
+            initialize();
+        };
+
+        function initialize() {
+            map = new nostra.maps.Map("map", {
+                id: "mapTest",
+                logo: true,
+                scalebar: true,
+                slider: true,
+                level: 18,
+                lat: 13.722944,
+                lon: 100.530449
+            });
+            map.events.load = function () {
+                hideLoading();
+            };
+
+            document.getElementById("rdoSearchByKeyword").onclick = function () {
+                document.getElementById("txtKey").value = "47 ถนนพระอาทิตย์";
+                document.getElementById("txtKey").disabled = false;
+                document.getElementById("txtLat").disabled = true;
+                document.getElementById("txtLon").disabled = true;
+                document.getElementById("txtLat").value = "";
+                document.getElementById("txtLon").value = "";
+            };
+            document.getElementById("rdoSearchByLatLon").onclick = function () {
+                document.getElementById("txtLat").value = "13.76320404";
+                document.getElementById("txtLon").value = "100.49456756";
+                document.getElementById("txtKey").disabled = true;
+                document.getElementById("txtLat").disabled = false;
+                document.getElementById("txtLon").disabled = false;
+                document.getElementById("txtKey").value = "";
+            };
+        }
+
+        function addressSearch() {
+            showLoading();
+            var divResult = document.getElementById('result');
+            divResult.innerHTML = "";
+
+            $.ajax({
+                url: "//api.nostramap.com/Service/V2/Location/addressSearch",
+                jsonp: "callback",
+                dataType: "jsonp",
+                contentType: "application/json",
+                data: {
+                    key: "Gjtn7SIciJica9ypDXvueZChpod2CUpP8Cw2EOc4svdqgxS7Tx7OXiQlmR4p0U(fXcOqpjmZyV3xebKE9WxU520=====2",
+                    keyword: document.getElementById("txtKey").value.trim(),
+                    lat: document.getElementById("txtLat").value.trim(),
+                    lon: document.getElementById("txtLon").value.trim(),
+                    numReturn: document.getElementById("txtNumreturnKeyword").value.trim(),
+                    language: document.getElementById("cboLanguage").value.trim()
+                },
+                success: function (results) {
+                    hideLoading();
+                    var divTable = document.getElementById('autocomplete');
+                    divTable.style.display = 'none';
+                    divTable.innerHTML = "";
+
+                    if (results.results == null) {
+                        divResult.innerHTML = results.errorMessage;
+                    } else if (results.results.length < 1) {
+                        divResult.innerHTML = results.errorMessage;
+                    } else {
+                        divTable.style.display = 'block';
+                        var item = document.createElement("div");
+                        item.innerHTML = 'กรุณาเลือกผลลัพธ์สถานที่';
+                        divTable.appendChild(item);
+
+                        var linebreak = document.createElement('br');
+                        divTable.appendChild(linebreak);
+
+                        results.results.forEach(result => {
+                            var item = document.createElement("div");
+                            item.innerHTML = result.FormattedAddress
+                            divTable.appendChild(item);
+
+                            item.addEventListener("click", function () {
+                                showDetail(result.LocationID);
+                            });
+
+                            var linebreak = document.createElement('hr');
+                            divTable.appendChild(linebreak);
+                        });
+                    }
+                },
+                error: function (response) {
+                    hideLoading();
+                }
+            });
+        }
+
+        function showDetail(locationID) {
+            $.ajax({
+                url: "//api.nostramap.com/Service/V2/Location/addressSearchDetail",
+                jsonp: "callback",
+                dataType: "jsonp",
+                contentType: "application/json",
+                data: {
+                    key: "Gjtn7SIciJica9ypDXvueZChpod2CUpP8Cw2EOc4svdqgxS7Tx7OXiQlmR4p0U(fXcOqpjmZyV3xebKE9WxU520=====2",
+                    locationID: locationID,
+                    language: document.getElementById("cboLanguage").value.trim()
+                },
+                success: function (resultDetail) {
+                    var divResultDetail = document.getElementById('result');
+                    divResultDetail.innerHTML = "";
+
+                    if (resultDetail.results == null) {
+                        divResultDetail.innerHTML = results.errorMessage;
+                    } else if (resultDetail.results.length < 1) {
+                        divResultDetail.innerHTML = results.errorMessage;
+                    } else {
+                        var result = resultDetail.results;
+                        divResultDetail.innerHTML = "<div>LocationID: " + result["LocationID"] + "</div>" +
+                            "<div>BusinessName: " + ((result["BusinessName"]) ? result["BusinessName"] : "") + "</div>" +
+                            "<div>HouseNumber: " + ((result["HouseNumber"]) ? result["HouseNumber"] : "") + "</div>" +
+                            "<div>PremiseName: " + ((result["PremiseName"]) ? result["PremiseName"] : "") + "</div>" +
+                            "<div>PremiseLaneName: " + ((result["PremiseLaneName"]) ? result["PremiseLaneName"] : "") + "</div>" +
+                            "<div>Moo: " + ((result["Moo"]) ? result["Moo"] : "") + "</div>" +
+                            "<div>StreetLeadingType: " + ((result["StreetLeadingType"]) ? result["StreetLeadingType"] : "") + "</div>" +
+                            "<div>StreetName: " + ((result["StreetName"]) ? result["StreetName"] : "") + "</div>" +
+                            "<div>StreetTrailingType: " + ((result["StreetTrailingType"]) ? result["StreetTrailingType"] : "") + "</div>" +
+                            "<div>SubStreetLeadingType: " + ((result["SubStreetLeadingType"]) ? result["SubStreetLeadingType"] : "") + "</div>" +
+                            "<div>SubStreetName: " + ((result["SubStreetName"]) ? result["SubStreetName"] : "") + "</div>" +
+                            "<div>SubStreetTrailingType: " + ((result["SubStreetTrailingType"]) ? result["SubStreetTrailingType"] : "") + "</div>" +
+                            "<div>StreetFullName: " + ((result["StreetFullName"]) ? result["StreetFullName"] : "") + "</div>" +
+                            "<div>SubDistrictPrefix: " + ((result["SubDistrictPrefix"]) ? result["SubDistrictPrefix"] : "") + "</div>" +
+                            "<div>SubDistrict: " + ((result["SubDistrict"]) ? result["SubDistrict"] : "") + "</div>" +
+                            "<div>DistrictPrefix: " + ((result["DistrictPrefix"]) ? result["DistrictPrefix"] : "") + "</div>" +
+                            "<div>District: " + ((result["District"]) ? result["District"] : "") + "</div>" +
+                            "<div>ProvincePrefix: " + ((result["ProvincePrefix"]) ? result["ProvincePrefix"] : "") + "</div>" +
+                            "<div>Province: " + ((result["Province"]) ? result["Province"] : "") + "</div>" +
+                            "<div>LanguageCode: " + ((result["LanguageCode"]) ? result["LanguageCode"] : "") + "</div>" +
+                            "<div>LAT_LON: " + ((result["LAT_LON"]) ? result["LAT_LON"] : "") + "</div>" +
+                            "<div>PostalCode: " + ((result["PostalCode"]) ? result["PostalCode"] : "") + "</div>" +
+                            "<div>FormattedAddress: " + ((result["FormattedAddress"]) ? result["FormattedAddress"] : "") + "</div>"
+                    }
+                    hideLoading();
+                },
+                error: function (response) {
+                    hideLoading();
+                }
+            });
+        }
+
+        function languageChange() {
+            document.getElementById("divLanguage").innerHTML = document.getElementById("cboLanguage").value;
+        }
+
+        function showLoading() {
+            document.getElementById("dlgLoading").style.display = "block";
+        }
+
+        function hideLoading() {
+            document.getElementById("dlgLoading").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+
+    <div id="dlgLoading" class="loadingWidget">
+    </div>
+    <div id="map">
+    </div>
+    <div id="divSearchKey">
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    language:
+                </label>
+            </div>
+            <div class="search-cell">
+                <div class="cell stage-value" id="divLanguage">L</div>
+                <select id="cboLanguage" onchange="languageChange();" style="height: 26px; width: 224px;">
+                    <option value="L" selected>Local</option>
+                    <option value="E">English</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    option:
+                </label>
+            </div>
+            <div class="search-cell">
+                <div>
+                    <input id="rdoSearchByKeyword" style="margin: 5px;" type="radio" name="searchOption" value="true" checked>Search by Keyword</input>
+                </div>
+                <div>
+                    <input id="rdoSearchByLatLon" style="margin: 5px;" type="radio" name="searchOption" value="false">Search by Lat, Lon</input>
+                </div>
+            </div>
+        </div>
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    keyword:
+                </label>
+            </div>
+            <div class="search-cell">
+                <input type="text" id="txtKey" value="47 ถนนพระอาทิตย์" style="width: 278px;" />
+            </div>
+        </div>
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    latitude:
+                </label>
+            </div>
+            <div class="search-cell">
+                <input type="text" id="txtLat" style="width: 278px;" disabled/>
+            </div>
+        </div>
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    longitude:
+                </label>
+            </div>
+            <div class="search-cell">
+                <input type="text" id="txtLon" style="width: 278px;" disabled/>
+            </div>
+        </div>
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                    numreturn:
+                </label>
+            </div>
+            <div class="search-cell">
+                <input type="text" id="txtNumreturnKeyword" value="5" style="width: 278px;" />
+            </div>
+        </div>
+
+        <div class="search-row">
+            <div class="search-cell">
+                <label>
+                        
+                </label>
+            </div>
+            <div class="search-cell">
+                <button id="btnSearch" onclick="addressSearch();">
+                    Search
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="autocomplete">
+    </div>
+    <div id="result">
+    </div>
+</body>
+</html>
