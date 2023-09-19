@@ -228,13 +228,13 @@
                             divResultDetail.innerHTML = results.errorMessage;
                         } else if (resultDetail.results.length < 1) {
                             console.log(resultDetail.results)
-                            <!-- divResultDetail.innerHTML = results.errorMessage; -->
+                            // <!-- divResultDetail.innerHTML = results.errorMessage; -->
 
-                            var latitude = document.getElementById("txtLat").value.trim()
-                            var longitude = document.getElementById("txtLon").value.trim()
+                            // var latitude = document.getElementById("txtLat").value.trim()
+                            // var longitude = document.getElementById("txtLon").value.trim()
 
-                            addMarker(latitude, longitude, "<div>" + FormattedAddress + "</div>", "<div>" + FormattedAddress + "</div>");
-                            map.panTo(latitude, longitude);
+                            // addMarker(latitude, longitude, "<div>" + FormattedAddress + "</div>", "<div>" + FormattedAddress + "</div>");
+                            // map.panTo(latitude, longitude);
 
                         } else {
                             var result = resultDetail.results;
@@ -249,8 +249,8 @@
                                 var longitude = parseFloat(latLonArray[1]);
                 
                                 // Log the latitude to the console
-                                <!-- console.log("Latitude: " + latitude); -->
-                                <!-- console.log("Longitude: " + longitude); -->
+                                // console.log("Latitude: " + latitude);
+                                // console.log("Longitude: " + longitude);
                 
                                 // Add a marker on the map
                                 addMarker(latitude, longitude, "<div>" + result["LocationID"] + "</div>", "<div>" + ((result["FormattedAddress"]) ? result["FormattedAddress"] : "") + "</div>");
