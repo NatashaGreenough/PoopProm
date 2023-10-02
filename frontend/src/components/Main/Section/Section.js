@@ -14,6 +14,10 @@ export default function Section() {
     navigate('/share');
   };
 
+  const LinktoFind = () => {
+    navigate('/find');
+  };
+
   return (
     <>
       <div className="hero-section">
@@ -22,7 +26,7 @@ export default function Section() {
           <span className="heading-sub">Your best toilet finder</span>
         </h1>
         <div className="hero-btn-box">
-          <button className="hero-btn mr">Find</button>
+          <button onClick = {LinktoFind} className="hero-btn mr">Find</button>
           <button onClick = {LinktoShare} className="hero-btn share">Share</button>
         </div>
       </div>
