@@ -1,25 +1,26 @@
 CREATE DATABASE POOPPROM;
-CREATE USER 'pp'@'localhost' IDENTIFIED BY 'poop_prom';
+/*CREATE USER 'pp'@'localhost' IDENTIFIED BY 'poop_prom';*/
 /* CREATE USER 'pp'@'%' IDENTIFIED BY 'poop_prom'; */
-GRANT ALL ON POOPPROM.* TO 'pp'@'localhost';
+/*GRANT ALL ON POOPPROM.* TO 'pp'@'localhost';*/
 /* GRANT ALL ON POOPPROM.* TO 'pp'@'%';*/
 FLUSH PRIVILEGES;
 USE POOPPROM;
 
 CREATE TABLE toilets (
     toilet_id INT (10) AUTO_INCREMENT PRIMARY KEY,
-    toilet_name VARCHAR (25) DEFAULT NULL
+    toilet_name VARCHAR (25) NOT NULL
 );
 
 CREATE TABLE locations (
     location_id INT (10) AUTO_INCREMENT PRIMARY KEY,
-    location_latitude DECIMAL (18, 15) DEFAULT NULL,
-    location_longitude DECIMAL (18, 15) DEFAULT NULL,
+    location_latitude DECIMAL (18, 15) NOT NULL,
+    location_longitude DECIMAL (18, 15) NOT NULL,
     toilet_id INT (10) NOT NULL,
     FOREIGN KEY (toilet_id) REFERENCES toilets (toilet_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE address_info (
+    address_id INT (10) AUTO_INCREMENT PRIMARY KEY,
     toilet_address VARCHAR (100) DEFAULT NULL, 
     toilet_district VARCHAR (50) DEFAULT NULL,
     toilet_province VARCHAR (50) DEFAULT NULL,
@@ -35,7 +36,8 @@ CREATE TABLE label_info (
 );
 
 CREATE TABLE pic_info (
-    toilet_pic BLOB DEFAULT NULL,
+    pic_id INT (10) AUTO_INCREMENT PRIMARY KEY,
+    toilet_pic LONGBLOB DEFAULT NULL,
     toilet_id INT (10) NOT NULL,
     FOREIGN KEY (toilet_id) REFERENCES toilets (toilet_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -54,38 +56,38 @@ CREATE TABLE avg_rate (
 
 
 /* Data for table toilets */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (1,'HM'); /* https://maps.app.goo.gl/FmRrXCRsmDwCMtiUA */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (2,'ECC'); /* https://maps.app.goo.gl/bYetukU4WYpVqciZ9 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (3,'Suvarnabhumi Airport'); /* https://maps.app.goo.gl/L6Fe9qYzRAT6t7ae6 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (4,'Robinson Ladkrabang'); /* https://maps.app.goo.gl/W7y9yKXYaz38W4hJ9 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (5,'Central Ladprao'); /* https://maps.app.goo.gl/Y46PHkrzFn5NS2oj8 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (6,'Terminal21 Rama 3'); /* https://maps.app.goo.gl/RDFP3ofHo36rKkJX7 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (7,'Terminal21 Pattaya'); /* https://maps.app.goo.gl/pC9fZK6ybWPPzVAf6 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (8,'Bangsaen Beach'); /* 13.288560008745767, 100.91127469813814 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (9,'WAT PLUK'); /* https://maps.app.goo.gl/oxEWGfHbGj435wBm8 */
-INSERT INTO toilets(toilet_id, toilet_name) VALUES (10,'12 Building'); /* https://maps.app.goo.gl/pYkgkRHTTb6TqzAH8 */
+INSERT INTO toilets(toilet_name) VALUES ('HM'); /* https://maps.app.goo.gl/FmRrXCRsmDwCMtiUA */
+INSERT INTO toilets(toilet_name) VALUES ('ECC'); /* https://maps.app.goo.gl/bYetukU4WYpVqciZ9 */
+INSERT INTO toilets(toilet_name) VALUES ('Suvarnabhumi Airport'); /* https://maps.app.goo.gl/L6Fe9qYzRAT6t7ae6 */
+INSERT INTO toilets(toilet_name) VALUES ('Robinson Ladkrabang'); /* https://maps.app.goo.gl/W7y9yKXYaz38W4hJ9 */
+INSERT INTO toilets(toilet_name) VALUES ('Central Ladprao'); /* https://maps.app.goo.gl/Y46PHkrzFn5NS2oj8 */
+INSERT INTO toilets(toilet_name) VALUES ('Terminal21 Rama 3'); /* https://maps.app.goo.gl/RDFP3ofHo36rKkJX7 */
+INSERT INTO toilets(toilet_name) VALUES ('Terminal21 Pattaya'); /* https://maps.app.goo.gl/pC9fZK6ybWPPzVAf6 */
+INSERT INTO toilets(toilet_name) VALUES ('Bangsaen Beach'); /* 13.288560008745767, 100.91127469813814 */
+INSERT INTO toilets(toilet_name) VALUES ('WAT PLUK'); /* https://maps.app.goo.gl/oxEWGfHbGj435wBm8 */
+INSERT INTO toilets(toilet_name) VALUES ('12 Building'); /* https://maps.app.goo.gl/pYkgkRHTTb6TqzAH8 */
 
 /* Data for table locations */
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (1, 13.726643935743672, 100.77509404166722, 1);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (2, 13.729491808587719, 100.77554987909062, 2); 
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (3, 13.69224355607938, 100.74997481586672, 3);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (4, 13.720426644205567, 100.72482517378923, 4);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (5, 13.817326796748022, 100.5617048607233, 5);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (6, 13.689863583587886, 100.50774335547086, 6);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (7, 12.950208050541995, 100.89093198452599, 7); 
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (8, 13.288515158949105, 100.9112885232461, 8);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (9, 13.725246806597145, 100.76856623037527, 9);
-INSERT INTO locations(location_id, location_latitude, location_longitude, toilet_id) 
-VALUES (10, 13.727636119034525, 100.77231795837469, 10);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.726643935743672, 100.77509404166722, 1);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.729491808587719, 100.77554987909062, 2); 
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.69224355607938, 100.74997481586672, 3);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.720426644205567, 100.72482517378923, 4);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.817326796748022, 100.5617048607233, 5);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.689863583587886, 100.50774335547086, 6);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (12.950208050541995, 100.89093198452599, 7); 
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.288515158949105, 100.9112885232461, 8);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.725246806597145, 100.76856623037527, 9);
+INSERT INTO locations(location_latitude, location_longitude, toilet_id) 
+VALUES (13.727636119034525, 100.77231795837469, 10);
 
 /* Data for table address_info */
 INSERT INTO address_info(toilet_address, toilet_district, toilet_province, toilet_zip, toilet_id)
@@ -113,18 +115,7 @@ VALUES ('3 ถนน ฉลองกรุง', 'Lat Krabang', 'Bangkok', '10520
 INSERT INTO label_info(toilet_label, toilet_id) VALUES ('spray', 1);
 
 /* Data for table pic_info */
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t01_1.jpg'), 1);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t02_1.jpg'), 2);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t03_1.jpg'), 3);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t03_2.jpg'), 3);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t05_1.jpg'), 5);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t06_1.jpg'), 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t06_2.jpg'), 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t06_3.jpg'), 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t07_1.jpg'), 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t07_2.jpg'), 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t07_3.jpg'), 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES (LOAD_FILE('/toilet_img/t10_1.jpg'), 10);
+/*INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('', 1);*/
 
 
 /* Data for table ratings */
