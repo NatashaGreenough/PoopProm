@@ -90,24 +90,51 @@
                 scalebar: true,
                 slider: true,
                 level: 18,
-                lat: 13.722944,
-                lon: 100.530449
+                lat: 13.726643935743672,
+                lon: 100.775094041667220
             });
     
             pointLayer = new nostra.maps.layers.GraphicsLayer(map, { id: "pointLayer", mouseOver: false });
             map.addLayer(pointLayer);
-    
+            
+            console.log('Fetching data from: http://localhost:5000/poop_prom/get_toilets');
+
             // Load JSON data from an external file (replace 'data.json' with your file path)
-            fetch('data.json')
+            fetch('http://localhost:5000/poop_prom/get_toilets')
                 .then(response => response.json())
                 .then(data => {
-                    // Process the JSON data and add markers to the map
+                    console.log('Data:', data);
+                    // Process the API data and add markers to the map
                     data.forEach(item => {
-                        addMarker(item.latitude, item.longitude, item.title, item.description);
+                        content = ""
+                        if (item.toilet_address) {
+                            content = content  + item.toilet_address
+                        }
+                        if (item.toilet_district) {
+                            content = content + "<br>" + item.toilet_district
+                        }
+                        if (item.toilet_province) {
+                            content = content + "<br>" + item.toilet_province
+                        }
+                        if (item.toilet_province) {
+                            content = content + "<br>" + item.toilet_zip
+                        }
+                        if (item.avg_rating){
+                            rating = Math.round(item.avg_rating);
+                            <!-- console.log(rating); -->
+                            star_rating = ""
+                            for (let i = 0; i < rating; i++) {
+                                star_rating = star_rating + "<img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\">"
+                            }
+                            <!-- console.log(star_rating); -->
+                            <!-- content = content + "<br>" + "<div>" + item.star_rating + "</div>" -->
+                            content = content + "<br>" + item.avg_rating
+                        }
+                        addMarker(item.location_latitude, item.location_longitude, item.toilet_name, content);
                     });
                 })
                 .catch(error => {
-                    console.error('Error loading JSON data:', error);
+                    console.error('Error loading API data:', error);
                 });
         }
     
