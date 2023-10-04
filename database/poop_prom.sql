@@ -1,7 +1,7 @@
 CREATE DATABASE POOPPROM;
-/*CREATE USER 'pp'@'localhost' IDENTIFIED BY 'poop_prom';*/
+CREATE USER 'pp'@'localhost' IDENTIFIED BY 'poop_prom';
 /* CREATE USER 'pp'@'%' IDENTIFIED BY 'poop_prom'; */
-/*GRANT ALL ON POOPPROM.* TO 'pp'@'localhost';*/
+GRANT ALL ON POOPPROM.* TO 'pp'@'localhost';
 /* GRANT ALL ON POOPPROM.* TO 'pp'@'%';*/
 FLUSH PRIVILEGES;
 USE POOPPROM;
@@ -30,7 +30,10 @@ CREATE TABLE address_info (
 );
 
 CREATE TABLE label_info (
-    toilet_label VARCHAR (50) DEFAULT NULL,
+    bidet_spray BOOLEAN DEFAULT NULL,
+    squat_toilet BOOLEAN DEFAULT NULL,
+    auto_toilet BOOLEAN DEFAULT NULL,
+    handicap_toilet BOOLEAN DEFAULT NULL,
     toilet_id INT (10) NOT NULL,
     FOREIGN KEY (toilet_id) REFERENCES toilets (toilet_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -112,7 +115,6 @@ INSERT INTO address_info(toilet_address, toilet_district, toilet_province, toile
 VALUES ('3 ถนน ฉลองกรุง', 'Lat Krabang', 'Bangkok', '10520', 10);
 
 /* Data for table label_info */
-INSERT INTO label_info(toilet_label, toilet_id) VALUES ('spray', 1);
 
 /* Data for table pic_info */
 /*INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('', 1);*/
