@@ -30,14 +30,18 @@ CREATE TABLE address_info (
 );
 
 CREATE TABLE label_info (
-    toilet_label VARCHAR (50) DEFAULT NULL,
+    bidet_spray BOOLEAN NOT NULL DEFAULT 0,
+    squat_toilet BOOLEAN NOT NULL DEFAULT 0,
+    auto_toilet BOOLEAN NOT NULL DEFAULT 0,
+    handicap_toilet BOOLEAN NOT NULL DEFAULT 0,
     toilet_id INT (10) NOT NULL,
     FOREIGN KEY (toilet_id) REFERENCES toilets (toilet_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE pic_info (
     pic_id INT (10) AUTO_INCREMENT PRIMARY KEY,
-    toilet_pic LONGBLOB DEFAULT NULL,
+    /*toilet_pic LONGBLOB DEFAULT NULL,*/
+    toilet_pic VARCHAR (200) DEFAULT NULL,
     toilet_id INT (10) NOT NULL,
     FOREIGN KEY (toilet_id) REFERENCES toilets (toilet_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -112,10 +116,31 @@ INSERT INTO address_info(toilet_address, toilet_district, toilet_province, toile
 VALUES ('3 ถนน ฉลองกรุง', 'Lat Krabang', 'Bangkok', '10520', 10);
 
 /* Data for table label_info */
-INSERT INTO label_info(toilet_label, toilet_id) VALUES ('spray', 1);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (0, 0, 0, 1, 1);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (0, 0, 0, 0, 2);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (1, 0, 0, 1, 3);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (1, 0, 0, 1, 4);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (1, 0, 0, 1, 5);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (1, 0, 1, 1, 6);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (1, 0, 1, 1, 7);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (0, 1, 0, 1, 8);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (0, 1, 0, 0, 9);
+INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (0, 0, 0, 0, 10);
+
 
 /* Data for table pic_info */
-/*INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('', 1);*/
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1O6ozVPCjOxN2OZYAIVqzMqMQiwvvy8ro/view?usp=drive_link', 1);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1CRd7fuUudXwZkG4tvdHBfNlXDN4VXtvj/view?usp=drive_link', 2);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/13mHcq5zOw6ilKiEHzBTmQjDUJbAhCyUz/view?usp=drive_link', 3);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1ea24LclOJswR32VXvx358HNFbZHeS-v0/view?usp=drive_link', 3);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/13jV13oFbSbLoVzBKSEL5_N42fXiBHPLv/view?usp=drive_link', 5);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1H3mYxSKh5Lz7vmdnGGin1tu7HIW9nBfO/view?usp=drive_link', 6);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1NVcaHz71CXE0rqm5V22M4gjjqLFAvKNQ/view?usp=drive_link', 6);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1OvXj862COYrQ0HSjeix8BbMFgiUMulqR/view?usp=drive_link', 6);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1kmptDMd-5xsjo9s7lK1_j_rOE1Fh3eS_/view?usp=drive_link', 7);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/10iPA4K6vFnD_fATwIG9If3h7cz83MEyY/view?usp=drive_link', 7);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1os-cJ5N0rJ1M96z-wMgBMU-59PVmdA6z/view?usp=drive_link', 7);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1d7xrTrQPIa8GbiaVab3NIG4_4XQh3mWj/view?usp=drive_link', 10);
 
 
 /* Data for table ratings */
