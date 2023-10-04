@@ -23,17 +23,17 @@ def get_toilets():
         query = """
         SELECT toilets.toilet_id, toilet_name, location_latitude, location_longitude,
                toilet_address, toilet_district, toilet_province, toilet_zip,
-               GROUP_CONCAT(DISTINCT toilet_label) as toilet_label,
-               GROUP_CONCAT(DISTINCT toilet_pic) as toilet_pic,
-               AVG(ratings.toilet_rating) as avg_rating
+               bidet_spray, squat_toilet, auto_toilet, handicap_toilet,
+               GROUP_CONCAT(DISTINCT toilet_pic) as toilet_pic,toilet_avg_rate
         FROM toilets
         LEFT JOIN locations ON toilets.toilet_id = locations.toilet_id
         LEFT JOIN address_info ON toilets.toilet_id = address_info.toilet_id
         LEFT JOIN label_info ON toilets.toilet_id = label_info.toilet_id
         LEFT JOIN pic_info ON toilets.toilet_id = pic_info.toilet_id
-        LEFT JOIN ratings ON toilets.toilet_id = ratings.toilet_id
+        LEFT JOIN avg_rate ON toilets.toilet_id = avg_rate.toilet_id
         GROUP BY toilets.toilet_id, toilet_name, location_latitude, location_longitude,
-                 toilet_address, toilet_district, toilet_province, toilet_zip
+                 toilet_address, toilet_district, toilet_province, toilet_zip, 
+                 bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_avg_rate
         """
         
         cursor.execute(query)
@@ -43,7 +43,7 @@ def get_toilets():
         keys = [
             "toilet_id", "toilet_name", "location_latitude", "location_longitude",
             "toilet_address", "toilet_district", "toilet_province", "toilet_zip",
-            "toilet_label", "toilet_pic", "avg_rating"
+            "bidet_spray", "squat_toilet", "auto_toilet", "handicap_toilet", "toilet_pic", "toilet_avg_rate"
         ]
 
         # Convert the query result to a list of dictionaries
