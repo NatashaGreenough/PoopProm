@@ -80,10 +80,6 @@
         var map, pointLayer;
 
         nostra.onready = function () {
-            initialize();
-        };
-    
-        function initialize() {
             map = new nostra.maps.Map("map", {
                 id: "mapTest",
                 logo: true,
@@ -93,7 +89,12 @@
                 lat: 13.726643935743672,
                 lon: 100.775094041667220
             });
-    
+        
+            initializeMarkers();
+        };
+        
+        function initializeMarkers() {
+        
             pointLayer = new nostra.maps.layers.GraphicsLayer(map, { id: "pointLayer", mouseOver: false });
             map.addLayer(pointLayer);
             
@@ -106,69 +107,80 @@
                     console.log('Data:', data);
                     // Process the API data and add markers to the map
                     for (var i in data) {
-                        item = data[i]
-                        console.log(item)
-                        content = ""
+                        item = data[i];
+                        console.log(item);
+                        content = "";
                         if (item.toilet_name) {
-                            content = "<div font-size:20px\"><strong>"
-                            content = content + item.toilet_name + "</strong></div>"
+                            content = "<div font-size:20px\"><strong>";
+                            content = content + item.toilet_name + "</strong></div>";
                         }
 
                         if (item.toilet_address) {
                             content = content + "<hr>"
-                            content = content + item.toilet_address
+                            content = content + item.toilet_address;
                         }
                         if (item.toilet_district) {
-                            content = content + "<br>" + item.toilet_district
+                            content = content + "<br>" + item.toilet_district;
                         }
                         if (item.toilet_province) {
-                            content = content + "<br>" + item.toilet_province
+                            content = content + "<br>" + item.toilet_province;
                         }
                         if (item.toilet_province) {
-                            content = content + "<br>" + item.toilet_zip
+                            content = content + "<br>" + item.toilet_zip;
                         }
-                        if (item.avg_rating){
-                            rating = Math.round(item.avg_rating);
+                        if (item.toilet_avg_rate){
+                            rating = Math.round(item.toilet_avg_rate);
                             console.log(rating);
-                            star_rating = ""
+                            star_rating = "";
                             for (let i = 0; i < rating; i++) {
-                                star_rating = star_rating + "<img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> "
+                                star_rating = star_rating + "<img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> ";
                             }
-                             console.log(star_rating);
-                            content = content + "<br>" + star_rating
-                            <!-- content = content + "<br>" + item.avg_rating -->
+                            // console.log(star_rating);
+                            content = content + "<br>" + star_rating;
+                            // content = content + "<br>" + item.avg_rating
+                        }
+                        if (item.toilet_pic) {
+                            console.log(item.toilet_pic);
+                            var image_id = item.toilet_pic.split('/d/').pop().split('/view')[0];
+                            console.log(item.toilet_pic.split('/d/').pop().split('/view')[0]);
+                            content = content + "<br><img src=\"" + "https://drive.google.com/uc?export=view&id=" + image_id + "\" style=\"max-width: 100%; height: auto;\"> ";
                         }
                         console.log(content)
                         addMarker(item.location_latitude, item.location_longitude, item.toilet_name, content);
                     };
                 })
                 .catch(error => {
-                    console.error('Error loading API data:', error);
+                    console.error('Error loading', error);
                 });
         }
     
         function addMarker(latitude, longitude, title, description) {
-            var nostraCallout = new nostra.maps.CustomCallout({ 
-                content: description, 
-                width: 256,
-                height: 128,
-                color: "#FFFFFF",
-                fontSize: 20,
-                fontColor: "#000000",
-                fontFamily: "Sarabun New",
-                showShadow: true  
-            });
-            var nostraLabel = new nostra.maps.symbols.Label({
-                text: title,
-                size: "10",
-                position: "top"
-            });
-            var pointMarker = new nostra.maps.symbols.Marker({ url: '', width: 60, height: 60, customCallout: nostraCallout, label: nostraLabel});
-            pointLayer.addMarker(latitude, longitude, pointMarker);
+            try {
+                // Attempt to create and add the marker
+                var nostraCallout = new nostra.maps.CustomCallout({ 
+                    content: description, 
+                    width: 256,
+                    height: 128,
+                    color: "#FFFFFF",
+                    fontSize: 20,
+                    fontColor: "#000000",
+                    fontFamily: "Sarabun New",
+                    showShadow: true  
+                });
+                var nostraLabel = new nostra.maps.symbols.Label({
+                    text: title,
+                    size: "10",
+                    position: "top"
+                });
+                var pointMarker = new nostra.maps.symbols.Marker({ url: '', width: 60, height: 60, customCallout: nostraCallout, label: nostraLabel});
+                pointLayer.addMarker(latitude, longitude, pointMarker);
+            } catch (error) {
+                console.error('Error adding marker:', error);
+            }
         }
     </script>
 </head>
-<body class="tundra customClass">
+<body>
     <div id="map">
     </div>
 </body>
