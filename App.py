@@ -8,7 +8,7 @@ app = Flask(__name__)
 cors = CORS(app)
 
 db = mysql.connector.connect(
-    host="poopdb.ctdl0ufcmt9o.us-east-1.rds.amazonaws.com",
+    host="poop-database02.cnlksndkjy8e.us-east-1.rds.amazonaws.com",
     user="admin",
     password="Poopprom",
     database="poopdb"
