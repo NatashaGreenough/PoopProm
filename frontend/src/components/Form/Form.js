@@ -88,7 +88,7 @@ class Form extends Component {
       console.log("Form submitted:", formData);
       console.log(images);
 
-      axios.post("http://localhost:5000/submit", formData);
+      axios.post("http://172.31.36.42:5000/submit", formData);
 
     } else {
       // Proceed to the next step
