@@ -159,7 +159,7 @@ class Form extends Component {
                 </button>
               )}
               {step === 3 && (
-                <button className="btn" type="submit">
+                <button onClick={event => window.location.href='/ '} className="btn" type="submit">
                   Submit
                 </button>
               )}
