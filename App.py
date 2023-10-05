@@ -65,6 +65,7 @@ def get_data():
         data['toiletTypes'][3]['status']
     )
 
+    print(data)
     toiletID = nameDB(toiletName)
     addressDB(address, district, province, zipCode, toiletID)
     labelDB(bidet, squat, auto, handicap, toiletID)
