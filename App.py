@@ -72,4 +72,4 @@ def get_data():
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(host='172.31.36.42', port=5000)
+    app.run(host='172.31.33.227', port=5000)
