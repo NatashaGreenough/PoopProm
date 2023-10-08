@@ -125,7 +125,7 @@
                         if (item.toilet_province) {
                             content = content + "<br>" + item.toilet_province;
                         }
-                        if (item.toilet_province) {
+                        if (item.toilet_zip) {
                             content = content + "<br>" + item.toilet_zip;
                         }
                         if (item.toilet_avg_rate){
@@ -136,8 +136,11 @@
                                 star_rating = star_rating + "<img src=\"https://developer.nostramap.com/developer/asset/image/icon/ic-customCallout-rating.png\"> ";
                             }
                             // console.log(star_rating);
-                            content = content + "<br>" + star_rating;
+                            content = content + "<br>" + star_rating + "<br>";
                             // content = content + "<br>" + item.avg_rating
+                        }
+                        if (item.bidet_spray) {
+                            content = content + "<img src=\"https://drive.google.com/uc?export=view&id=1OcYGuTp0jJfVszAaWbweS5qjVdTDIbXc\" width=\"64\" height=\"64\"> ";
                         }
                         if (item.toilet_pic) {
                             console.log(item.toilet_pic);
