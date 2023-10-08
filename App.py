@@ -8,14 +8,15 @@ app = Flask(__name__)
 cors = CORS(app)
 
 db = mysql.connector.connect(
-    host="localhost",
-    user="pp",
-    password="poop_prom",
-    database="POOPPROM"
+    host="poop-database.ctdl0ufcmt9o.us-east-1.rds.amazonaws.com",
+    user="admin",
+    password="Poopprom",
+    database="poopdb"
 )
 
 def execute_query(query, data):
     try:
+        print("execute_query")
         cursor = db.cursor()
         cursor.execute(query, data)
         db.commit()
@@ -31,16 +32,19 @@ def execute_query(query, data):
             cursor.close()
 
 def nameDB(name):
+    print("nameDB")
     query = "INSERT INTO toilets(toilet_name) VALUES (%s)"
     data = (name,)
     return execute_query(query, data)
 
 def addressDB(address, district, province, zipcode, toiletID):
+    print("addressDB")
     query = "INSERT INTO address_info(toilet_address, toilet_district, toilet_province, toilet_zip, toilet_id) VALUES (%s, %s, %s, %s, %s)"
     data = (address, district, province, zipcode, toiletID)
     return execute_query(query, data)
     
 def labelDB(bidet, squat, auto, handicap, toiletID):
+    print("labelDB")
     query = "INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, toilet_id) VALUES (%s, %s, %s, %s, %s)"
     data = (bidet, squat, auto, handicap, toiletID)
     return execute_query(query, data)
@@ -60,7 +64,7 @@ def get_data():
         data['toiletTypes'][2]['status'],
         data['toiletTypes'][3]['status']
     )
-
+    print(data)
     toiletID = nameDB(toiletName)
     addressDB(address, district, province, zipCode, toiletID)
     labelDB(bidet, squat, auto, handicap, toiletID)
@@ -68,4 +72,4 @@ def get_data():
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='172.31.33.5', port=5000)

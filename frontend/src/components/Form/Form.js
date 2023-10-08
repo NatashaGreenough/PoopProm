@@ -88,7 +88,7 @@ class Form extends Component {
       console.log("Form submitted:", formData);
       console.log(images);
 
-      axios.post("http://localhost:5000/submit", formData);
+      axios.post("http://172.31.33.5:5000/submit", formData);
 
     } else {
       // Proceed to the next step
@@ -159,7 +159,7 @@ class Form extends Component {
                 </button>
               )}
               {step === 3 && (
-                <button className="btn" type="submit">
+                <button onClick={event => window.location.href='/ '} className="btn" type="submit">
                   Submit
                 </button>
               )}
