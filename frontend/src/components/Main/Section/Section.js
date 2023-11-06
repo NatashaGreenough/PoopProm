@@ -48,7 +48,7 @@ export default function Section() {
                 your facility easily, promote your business, and contribute to
                 better access to clean restrooms.
               </p>
-              <button className="cta-btn">Register Now !</button>
+              <button onClick = {LinktoShare} className="cta-btn">Share Now !</button>
             </div>
             <div className="cta-img-box" aria-label="map img">
               <img className="obj-img" src={object1} alt="toilet paper" />

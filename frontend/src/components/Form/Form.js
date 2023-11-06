@@ -84,11 +84,35 @@ class Form extends Component {
 
     // If the current step is the last step, you can submit the form data
     if (step === 3) {
+
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
 
-      axios.post("http://172.31.33.5:5000/submit", formData);
+      // axios.post("http://127.0.0.1:5000/submit", formData); //"http://172.31.33.5:5000/submit"
+
+      /////////////////////////////////////////////
+      const apiUrl = 'https://your-api-gateway-url/resource-endpoint'; /// API gateway URL
+      const requestData = {
+        data: formData,
+      };
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ responseMessage: data.message });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+        /////////////////////////////////////////////////
 
     } else {
       // Proceed to the next step
