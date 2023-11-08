@@ -1,8 +1,7 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy 
-from flask_marshmallow import Marshmallow 
+
 import os
 
 app = Flask(__name__)
