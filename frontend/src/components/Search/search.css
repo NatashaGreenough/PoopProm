@@ -170,3 +170,8 @@ select {
   margin: 50px 300px;
   background: #009938;
 } */
+
+.map-side {
+  max-width: 100%;
+  background-color: #62c2c0;
+}

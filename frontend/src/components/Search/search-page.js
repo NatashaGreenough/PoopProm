@@ -1,18 +1,53 @@
 import toiletData from "./fake-data";
 import "./search.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Search() {
+  const [show, setShow] = useState(false);
+
+  const [toilets, setToilets] = useState([]);
+  const [filteredToilets, setFilteredToilets] = useState([]);
   const [selectedToiletTypes, setSelectedToiletTypes] = useState([]);
   const [selectedReviewStar, setSelectedReviewStar] = useState("");
-  const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    // Replace with your API endpoint
+    fetch("http://127.0.0.1:5000/poop_prom/get_toilets")
+      .then((response) => response.json())
+      .then((data) => {
+        setToilets(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Filter the toilets based on selected criteria
+    const filteredToilets = toilets.filter((toilet) => {
+      return (
+        // Check if all selected types have a status of true
+        selectedToiletTypes.every(
+          (selectedType) => toilet[selectedType] === 1
+        ) &&
+        // Check the review stars criteria
+        (selectedReviewStar === "" ||
+          toilet.toilet_avg_rate >= parseInt(selectedReviewStar)) &&
+        // Check the search query criteria
+        (searchQuery === "" ||
+          toilet.toilet_name.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    });
+
+    setFilteredToilets(filteredToilets);
+  }, [toilets, selectedToiletTypes, selectedReviewStar, searchQuery]);
+
   const toiletTypes = [
-    "Bidet spray",
-    "Squat toilet",
-    "Auto toilet",
-    "Handicap toilet",
+    "auto_toilet",
+    "bidet_spray",
+    "handicap_toilet",
+    "squat_toilet",
   ];
 
   const toggleToiletType = (type) => {
@@ -37,19 +72,19 @@ function Search() {
     setSearchQuery(event.target.value);
   };
 
-  const filteredToilets = toiletData.filter(
-    (toilet) =>
-      selectedToiletTypes.every((selectedType) =>
-        toilet.toiletTypes.some(
-          (type) => type.name === selectedType && type.status
-        )
-      ) &&
-      (selectedReviewStar === "" ||
-        toilet.reviewStar === parseInt(selectedReviewStar) ||
-        toilet.reviewStar >= parseInt(selectedReviewStar)) &&
-      (searchQuery === "" ||
-        toilet.toiletName.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // const filteredToilets = toiletData.filter(
+  //   (toilet) =>
+  //     selectedToiletTypes.every((selectedType) =>
+  //       toilet.toiletTypes.some(
+  //         (type) => type.name === selectedType && type.status
+  //       )
+  //     ) &&
+  //     (selectedReviewStar === "" ||
+  //       toilet.reviewStar === parseInt(selectedReviewStar) ||
+  //       toilet.reviewStar >= parseInt(selectedReviewStar)) &&
+  //     (searchQuery === "" ||
+  //       toilet.toiletName.toLowerCase().includes(searchQuery.toLowerCase()))
+  // );
 
   return (
     <div className="main">
@@ -82,14 +117,17 @@ function Search() {
         <div className="main-box scrollable">
           {filteredToilets.map((toilet) => (
             <Detail
-              key={toilet.id}
-              name={toilet.toiletName}
-              value={toilet.reviewStar}
-              type={toilet.toiletTypes}
-              address={toilet.address}
-              district={toilet.district}
-              province={toilet.province}
-              zipCode={toilet.zipCode}
+              key={toilet.toilet_id}
+              name={toilet.toilet_name}
+              value={toilet.toilet_avg_rate}
+              address={toilet.toilet_address}
+              district={toilet.toilet_district}
+              province={toilet.toilet_province}
+              zipCode={toilet.toilet_zip}
+              at={toilet.auto_toilet}
+              bs={toilet.bidet_spray}
+              ht={toilet.handicap_toilet}
+              st={toilet.squat_toilet}
             />
           ))}
         </div>
@@ -102,24 +140,33 @@ function Search() {
 
 export default Search;
 
-function Detail({ name, value, type, address, district, province, zipCode }) {
-  const trueTypes = type.filter((toiletType) => toiletType.status);
+function Detail({
+  name,
+  value,
+  address,
+  district,
+  province,
+  zipCode,
+  at,
+  bs,
+  ht,
+  st,
+}) {
+  // const trueTypes = type.filter((toiletType) => toiletType.status);
   const fullAddress = `${address}, ${district}, ${province}, ${zipCode}`;
   return (
     <div className="name-box">
       <h3>{name}</h3>
       <div className="review-box">
-        <span>{value}</span>
+        <span>{value !== null ? value : 0}</span>
         <StarRating value={value} />
       </div>
       <p>{fullAddress}</p>
       <div className="feature-list">
-        {console.log(trueTypes)}
-        {trueTypes.map((toiletType) => (
-          <span key={toiletType.id} className="feature">
-            {toiletType.name}
-          </span>
-        ))}
+        {at === 1 && <span className="feature">Auto Toilet</span>}
+        {bs === 1 && <span className="feature">Bidet Spray</span>}
+        {ht === 1 && <span className="feature">Handicap Toilet</span>}
+        {st === 1 && <span className="feature">Squat Toilet</span>}
       </div>
     </div>
   );

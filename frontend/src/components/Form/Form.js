@@ -4,7 +4,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import "./form-style.css";
 import "./queries.css";
-import axios from "axios";
+// import axios from "axios";
 
 class Form extends Component {
   constructor(props) {
@@ -84,7 +84,6 @@ class Form extends Component {
 
     // If the current step is the last step, you can submit the form data
     if (step === 3) {
-
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
@@ -92,15 +91,15 @@ class Form extends Component {
       // axios.post("http://127.0.0.1:5000/submit", formData); //"http://172.31.33.5:5000/submit"
 
       /////////////////////////////////////////////
-      const apiUrl = 'https://your-api-gateway-url/resource-endpoint'; /// API gateway URL
+      const apiUrl = "https://your-api-gateway-url/resource-endpoint"; /// API gateway URL
       const requestData = {
         data: formData,
       };
 
       fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       })
@@ -112,8 +111,7 @@ class Form extends Component {
           console.error(error);
         });
 
-        /////////////////////////////////////////////////
-
+      /////////////////////////////////////////////////
     } else {
       // Proceed to the next step
       this.setState({ step: step + 1 });
@@ -183,7 +181,11 @@ class Form extends Component {
                 </button>
               )}
               {step === 3 && (
-                <button onClick={event => window.location.href='/ '} className="btn" type="submit">
+                <button
+                  onClick={(event) => (window.location.href = "/ ")}
+                  className="btn"
+                  type="submit"
+                >
                   Submit
                 </button>
               )}
