@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy 
-from flask_marshmallow import Marshmallow 
+# from flask_sqlalchemy import SQLAlchemy 
+# from flask_marshmallow import Marshmallow 
 import os
 
 app = Flask(__name__)
@@ -52,12 +52,6 @@ def get_toilets():
         return jsonify(results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
-@app.route('/poop_prom/post_toilets', methods=['POST'])
-def create_toilet():
-    pass
-
 
 
 if __name__ == '__main__':
