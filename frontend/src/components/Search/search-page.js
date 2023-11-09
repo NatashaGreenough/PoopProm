@@ -1,16 +1,20 @@
-import toiletData from "./fake-data";
+/*eslint-disable no-undef*/
+
+import NostraMapComponent from "./NostraMapComponent";
 import "./search.css";
 import React, { useState, useEffect } from "react";
+// import WebSocket from 'ws';
 
 function Search() {
-  const [show, setShow] = useState(false);
 
+  const [show, setShow] = useState(false);
   const [toilets, setToilets] = useState([]);
   const [filteredToilets, setFilteredToilets] = useState([]);
   const [selectedToiletTypes, setSelectedToiletTypes] = useState([]);
   const [selectedReviewStar, setSelectedReviewStar] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [ws, setWs] = useState(null); // Add this line to define the state
+  
   useEffect(() => {
     // Replace with your API endpoint
     fetch("http://127.0.0.1:5000/poop_prom/get_toilets")
@@ -21,6 +25,29 @@ function Search() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+
+    // Setup WebSocket connection
+    const nativeWebSocket = new WebSocket("ws://127.0.0.1:4000");
+    setWs(nativeWebSocket);
+
+    nativeWebSocket.onopen = () => {
+      console.log("WebSocket connection established on search file");
+    };
+
+    nativeWebSocket.onmessage = (event) => {
+      const data = event.data;
+      console.log(`Received WebSocket data: ${data}`);
+      // Handle data received from the server (e.g., map updates)
+    };
+
+    nativeWebSocket.onclose = () => {
+      console.log("WebSocket connection closed on search file");
+    };
+
+    // Clean up the WebSocket connection when the component unmounts
+    return () => {
+      nativeWebSocket.close();
+    };
   }, []);
 
   useEffect(() => {
@@ -72,6 +99,24 @@ function Search() {
     setSearchQuery(event.target.value);
   };
 
+  // Handle toilet click event
+  const handleToiletClick = (latitude, longitude) => {
+    // console.log("Latitude:", latitude);
+    // console.log("Longitude:", longitude);
+    console.log(latitude, longitude);
+
+    ws.send(JSON.stringify({ latitude, longitude }));
+    
+    // Dispatch a custom event to notify the HTML file
+    // const event = new CustomEvent("update-map", {
+    //   detail: {
+    //     latitude,
+    //     longitude,
+    //   },
+    // });
+    // document.dispatchEvent(event);
+  };
+
   // const filteredToilets = toiletData.filter(
   //   (toilet) =>
   //     selectedToiletTypes.every((selectedType) =>
@@ -116,6 +161,11 @@ function Search() {
         </div>
         <div className="main-box scrollable">
           {filteredToilets.map((toilet) => (
+            <div
+            key={toilet.toilet_id}
+            className="toilet-detail"
+            onClick={() => handleToiletClick(toilet.location_latitude, toilet.location_longitude)}
+            >
             <Detail
               key={toilet.toilet_id}
               name={toilet.toilet_name}
@@ -129,11 +179,12 @@ function Search() {
               ht={toilet.handicap_toilet}
               st={toilet.squat_toilet}
             />
+            </div>
           ))}
         </div>
       </div>
-      <div class="box overlay"></div>
-      <div className="map-side">map</div>
+      <div className="box overlay"></div>
+      <div className="map-side"><NostraMapComponent /></div>
     </div>
   );
 }
