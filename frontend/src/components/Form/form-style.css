@@ -19,12 +19,16 @@
 .numbers {
   padding: 1.2rem 20%;
   display: grid;
-  grid-template-columns: 4rem auto 4rem auto 4rem;
+  grid-template-columns: 4rem auto 4rem auto 4rem auto 4rem;
   column-gap: 1.2rem;
 }
 
+.num {
+  justify-self: center;
+}
+
 .numbers > div {
-  height: 3.6rem;
+  height: 3.2rem;
   aspect-ratio: 1;
   background-color: #e7e7e7;
   border-radius: 50%;
@@ -254,4 +258,10 @@ h5 {
 /* ----------- */
 .border {
   border-color: red;
+}
+
+/* =================== */
+
+.map-box {
+  grid-column: 1/3;
 }

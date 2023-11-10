@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4";
 import "./form-style.css";
 import "./queries.css";
 // import axios from "axios";
@@ -18,6 +19,8 @@ class Form extends Component {
         district: "",
         province: "",
         zipCode: "",
+        longitude: "9.0",
+        latitude: "213.34",
         toiletTypes: [
           { id: 1, name: "Bidet spray", status: false },
           { id: 2, name: "Squat toilet", status: false },
@@ -83,7 +86,7 @@ class Form extends Component {
     const { step, formData, images } = this.state;
 
     // If the current step is the last step, you can submit the form data
-    if (step === 3) {
+    if (step === 4) {
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
@@ -140,11 +143,13 @@ class Form extends Component {
       <div className="form">
         <div className="form-container">
           <div className="numbers">
-            <div className={step >= 1 ? "active" : ""}>1</div>
+            <div className={step >= 1 ? "num active" : "num"}>1</div>
             <div id="number-line" className={step >= 2 ? "active" : ""}></div>
-            <div className={step >= 2 ? "active" : ""}>2</div>
+            <div className={step >= 2 ? "num active" : "num"}>2</div>
             <div id="number-line" className={step >= 3 ? "active" : ""}></div>
-            <div className={step >= 3 ? "active" : ""}>3</div>
+            <div className={step >= 3 ? "num active" : "num"}>3</div>
+            <div id="number-line" className={step >= 4 ? "active" : ""}></div>
+            <div className={step >= 4 ? "num active" : "num"}>4</div>
           </div>
           <div className="header">
             <h1>{FormTitles[step - 1]}</h1>
@@ -165,7 +170,13 @@ class Form extends Component {
                 handleChange={this.handleInputChange}
               />
             )}
-            {step === 3 && <Step3 />}
+            {step === 3 && (
+              <Step4
+                formData={formData}
+                handleChange={this.handleInputChange}
+              />
+            )}
+            {step === 4 && <Step3 />}
             <div className="footer">
               <button
                 className={step === 1 ? "hidden" : ""}
@@ -175,12 +186,12 @@ class Form extends Component {
                 Previous
               </button>
 
-              {step < 3 && (
+              {step < 4 && (
                 <button className="btn" type="submit">
                   Next
                 </button>
               )}
-              {step === 3 && (
+              {step === 4 && (
                 <button
                   onClick={(event) => (window.location.href = "/ ")}
                   className="btn"
