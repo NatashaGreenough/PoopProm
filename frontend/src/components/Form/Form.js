@@ -90,6 +90,7 @@ class Form extends Component {
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
+      console.log(formData);
 
       // axios.post("http://127.0.0.1:5000/submit", formData); //"http://172.31.33.5:5000/submit"
 
@@ -119,7 +120,6 @@ class Form extends Component {
       // Proceed to the next step
       this.setState({ step: step + 1 });
       console.log(formData);
-
     }
   };
 
@@ -130,7 +130,6 @@ class Form extends Component {
     this.setState({ formData: { ...formData, [name]: value } });
     // console.log(formData.latitude);
     // console.log(formData.longitude);
-    
   };
 
   // Function to go to the previous step
@@ -181,8 +180,7 @@ class Form extends Component {
                 handleChange={this.handleInputChange}
               />
             )}
-            {step === 4 && <Step3 />
-            }
+            {step === 4 && <Step3 />}
             <div className="footer">
               <button
                 className={step === 1 ? "hidden" : ""}
