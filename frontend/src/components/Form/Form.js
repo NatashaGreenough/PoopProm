@@ -118,6 +118,8 @@ class Form extends Component {
     } else {
       // Proceed to the next step
       this.setState({ step: step + 1 });
+      console.log(formData);
+
     }
   };
 
@@ -126,6 +128,9 @@ class Form extends Component {
     const { name, value } = event.target;
     const { formData } = this.state;
     this.setState({ formData: { ...formData, [name]: value } });
+    // console.log(formData.latitude);
+    // console.log(formData.longitude);
+    
   };
 
   // Function to go to the previous step
@@ -176,7 +181,8 @@ class Form extends Component {
                 handleChange={this.handleInputChange}
               />
             )}
-            {step === 4 && <Step3 />}
+            {step === 4 && <Step3 />
+            }
             <div className="footer">
               <button
                 className={step === 1 ? "hidden" : ""}
