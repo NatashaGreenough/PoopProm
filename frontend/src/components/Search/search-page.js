@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 // import WebSocket from 'ws';
 
 function Search() {
-
   const [show, setShow] = useState(false);
   const [toilets, setToilets] = useState([]);
   const [filteredToilets, setFilteredToilets] = useState([]);
@@ -14,7 +13,7 @@ function Search() {
   const [selectedReviewStar, setSelectedReviewStar] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [ws, setWs] = useState(null); // Add this line to define the state
-  
+
   useEffect(() => {
     // Replace with your API endpoint
     fetch("http://127.0.0.1:5000/poop_prom/get_toilets")
@@ -106,7 +105,7 @@ function Search() {
     console.log(latitude, longitude);
 
     ws.send(JSON.stringify({ latitude, longitude }));
-    
+
     // Dispatch a custom event to notify the HTML file
     // const event = new CustomEvent("update-map", {
     //   detail: {
@@ -162,29 +161,36 @@ function Search() {
         <div className="main-box scrollable">
           {filteredToilets.map((toilet) => (
             <div
-            key={toilet.toilet_id}
-            className="toilet-detail"
-            onClick={() => handleToiletClick(toilet.location_latitude, toilet.location_longitude)}
-            >
-            <Detail
               key={toilet.toilet_id}
-              name={toilet.toilet_name}
-              value={toilet.toilet_avg_rate}
-              address={toilet.toilet_address}
-              district={toilet.toilet_district}
-              province={toilet.toilet_province}
-              zipCode={toilet.toilet_zip}
-              at={toilet.auto_toilet}
-              bs={toilet.bidet_spray}
-              ht={toilet.handicap_toilet}
-              st={toilet.squat_toilet}
-            />
+              className="toilet-detail"
+              onClick={() =>
+                handleToiletClick(
+                  toilet.location_latitude,
+                  toilet.location_longitude
+                )
+              }
+            >
+              <Detail
+                key={toilet.toilet_id}
+                name={toilet.toilet_name}
+                value={toilet.toilet_avg_rate}
+                address={toilet.toilet_address}
+                district={toilet.toilet_district}
+                province={toilet.toilet_province}
+                zipCode={toilet.toilet_zip}
+                at={toilet.auto_toilet}
+                bs={toilet.bidet_spray}
+                ht={toilet.handicap_toilet}
+                st={toilet.squat_toilet}
+              />
             </div>
           ))}
         </div>
       </div>
       <div className="box overlay"></div>
-      <div className="map-side"><NostraMapComponent /></div>
+      <div className="map-side">
+        <NostraMapComponent />
+      </div>
     </div>
   );
 }

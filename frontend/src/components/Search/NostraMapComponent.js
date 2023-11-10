@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 class NostraMapComponent extends React.Component {
   render() {
     return (
-      <div>
+      <div className="map-page">
         <iframe
-          src="http://localhost:4000"  // Replace with your server's URL
+          src="http://localhost:4000" // Replace with your server's URL
           title="Nostra Map"
-          width="1642"
-          height="900"
+          width="100%"
+          height="100%"
           frameBorder="0"
         />
       </div>
