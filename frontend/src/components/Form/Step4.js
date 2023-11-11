@@ -59,30 +59,73 @@ export default function Step4({ formData, handleChange }) {
     // console.log(key_word);
 
     searchAddressByKeyword();
+    let map;
 
-    // nostra.onready = function () {
-    //   map = new nostra.maps.Map("map", {
-    //     id: "mapTest",
-    //     logo: true,
-    //     scalebar: false,
-    //     basemap: "streetmap",
-    //     slider: true,
-    //     level: 15,
-    //     lat: 13.722944,
-    //     lon: 100.530449,
-    //     country: "TH",
-    //   });
+    nostra.onready = function () {
+      map = new nostra.maps.Map("map", {
+        id: "mapTest",
+        logo: true,
+        scalebar: false,
+        basemap: "streetmap",
+        slider: true,
+        level: 15,
+        lat: 13.722944,
+        lon: 100.530449,
+        country: "TH",
+      });
 
-    //   pointLayer = new nostra.maps.layers.GraphicsLayer(map, {
-    //     id: "pointLayer",
-    //     mouseOver: false,
-    //   });
-    //   map.addLayer(pointLayer);
+      pointLayer = new nostra.maps.layers.GraphicsLayer(map, {
+        id: "pointLayer",
+        mouseOver: false,
+      });
+      map.addLayer(pointLayer);
 
-    //   map.events.click = function (e) {
-    //     handleMapClick(e);
-    //   };
-    // };
+      map.events.click = function (e) {
+        handleMapClick(e);
+      };
+    };
+  };
+
+  const handleMapClick = (e) => {
+    const coordinates = e.mapPoint;
+    const clickedLatitude = coordinates.y;
+    const clickedLongitude = coordinates.x;
+
+    // console.log(clickedLatitude, clickedLongitude);
+
+    pointLayer.clear();
+
+    setLatitude(clickedLatitude.toFixed(8));
+    setLongitude(clickedLongitude.toFixed(8));
+
+    console.log(clickedLatitude.toFixed(8), clickedLongitude.toFixed(8));
+    // console.log(latitude, longitude);
+
+    handleChange({
+      target: { name: "latitude", value: clickedLatitude.toFixed(8) },
+    });
+    handleChange({
+      target: { name: "longitude", value: clickedLongitude.toFixed(8) },
+    });
+
+    addMarker(clickedLatitude, clickedLongitude);
+  };
+  
+  const addMarker = (latitude, longitude) => {
+    try {
+      const pointMarker = new nostra.maps.symbols.Marker({
+        url: "",
+        width: 60,
+        height: 60,
+        onClick: function () {
+          console.log("Marker clicked!");
+        },
+      });
+
+      pointLayer.addMarker(latitude, longitude, pointMarker);
+    } catch (error) {
+      console.error("Error adding marker:", error);
+    }
   };
 
   const searchAddressByKeyword = () => {
@@ -152,11 +195,6 @@ export default function Step4({ formData, handleChange }) {
       });
 
   const openeMap = (latitudeStart, longitudeStart) => {
-    const script = document.createElement("script");
-    script.src =
-        "//api.nostramap.com/nostraapi/v2.0?key=GDdAoW1Vs(48(1ni3MvBQyXGF(HgoA3Xy4LhYd1tJ1N)BwfaEO0k)lySSnEV9(gn2wfgYAToSXKYfCpy2DC9O60=====2";
-    script.async = true;
-
     let map;
     console.log("map open")
 
@@ -168,8 +206,8 @@ export default function Step4({ formData, handleChange }) {
         basemap: "streetmap",
         slider: true,
         level: 18,
-        lat: latitudeStart,
-        lon: longitudeStart,
+        lat: 13.722944,
+        lon: 100.530449,
         country: "TH",
       });
 
@@ -178,6 +216,8 @@ export default function Step4({ formData, handleChange }) {
         id: "pointLayer",
         mouseOver: false,
       });
+      map.panTo(latitudeStart, longitudeStart);
+
       map.addLayer(pointLayer);
 
       setLatitude(latitudeStart.toFixed(8));
