@@ -19,8 +19,8 @@ class Form extends Component {
         district: "",
         province: "",
         zipCode: "",
-        longitude: "9.0",
-        latitude: "213.34",
+        longitude: "",
+        latitude: "",
         toiletTypes: [
           { id: 1, name: "Bidet spray", status: false },
           { id: 2, name: "Squat toilet", status: false },
