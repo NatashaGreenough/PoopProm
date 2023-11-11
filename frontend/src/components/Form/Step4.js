@@ -152,14 +152,19 @@ export default function Step4({ formData, handleChange }) {
       });
 
   const openeMap = (latitudeStart, longitudeStart) => {
+    const script = document.createElement("script");
+    script.src =
+        "//api.nostramap.com/nostraapi/v2.0?key=GDdAoW1Vs(48(1ni3MvBQyXGF(HgoA3Xy4LhYd1tJ1N)BwfaEO0k)lySSnEV9(gn2wfgYAToSXKYfCpy2DC9O60=====2";
+    script.async = true;
+
     let map;
     console.log("map open")
 
     nostra.onready = function () {
       map = new nostra.maps.Map("map", {
         id: "mapTest",
-        logo: false,
-        scalebar: false,
+        logo: true,
+        scalebar: true,
         basemap: "streetmap",
         slider: true,
         level: 18,
