@@ -13,7 +13,8 @@ function Search() {
   const [selectedReviewStar, setSelectedReviewStar] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [ws, setWs] = useState(null); // Add this line to define the state
-
+  const [mapCenter, setMapCenter] = useState(null);
+  
   useEffect(() => {
     // Replace with your API endpoint
     fetch("http://127.0.0.1:5000/poop_prom/get_toilets")
@@ -25,28 +26,28 @@ function Search() {
         console.error("Error fetching data:", error);
       });
 
-    // Setup WebSocket connection
-    const nativeWebSocket = new WebSocket("ws://127.0.0.1:4000");
-    setWs(nativeWebSocket);
+    //   // Setup WebSocket connection
+    // const nativeWebSocket = new WebSocket("ws://127.0.0.1:4000");
+    // setWs(nativeWebSocket);
 
-    nativeWebSocket.onopen = () => {
-      console.log("WebSocket connection established on search file");
-    };
+    // nativeWebSocket.onopen = () => {
+    //   console.log("WebSocket connection established on search file");
+    // };
 
-    nativeWebSocket.onmessage = (event) => {
-      const data = event.data;
-      console.log(`Received WebSocket data: ${data}`);
-      // Handle data received from the server (e.g., map updates)
-    };
+    // nativeWebSocket.onmessage = (event) => {
+    //   const data = event.data;
+    //   console.log(`Received WebSocket data: ${data}`);
+    //   // Handle data received from the server (e.g., map updates)
+    // };
 
-    nativeWebSocket.onclose = () => {
-      console.log("WebSocket connection closed on search file");
-    };
+    // nativeWebSocket.onclose = () => {
+    //   console.log("WebSocket connection closed on search file");
+    // };
 
-    // Clean up the WebSocket connection when the component unmounts
-    return () => {
-      nativeWebSocket.close();
-    };
+    // // Clean up the WebSocket connection when the component unmounts
+    // return () => {
+    //   nativeWebSocket.close();
+    // };
   }, []);
 
   useEffect(() => {
@@ -103,8 +104,9 @@ function Search() {
     // console.log("Latitude:", latitude);
     // console.log("Longitude:", longitude);
     console.log(latitude, longitude);
+    setMapCenter({ latitude, longitude });
 
-    ws.send(JSON.stringify({ latitude, longitude }));
+    // ws.send(JSON.stringify({ latitude, longitude }));
 
     // Dispatch a custom event to notify the HTML file
     // const event = new CustomEvent("update-map", {
@@ -189,7 +191,7 @@ function Search() {
       </div>
       <div className="box overlay"></div>
       <div className="map-side">
-        <NostraMapComponent />
+      <NostraMapComponent mapCenter={mapCenter} onToiletClick={handleToiletClick} />
       </div>
     </div>
   );
