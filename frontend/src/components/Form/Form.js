@@ -5,7 +5,7 @@ import Step3 from "./Step3";
 import Step4 from "./Step4";
 import "./form-style.css";
 import "./queries.css";
-// import axios from "axios";
+import axios from "axios";
 
 class Form extends Component {
   constructor(props) {
@@ -50,15 +50,37 @@ class Form extends Component {
   handleImageUpload = (images) => {
     if (images.length < 1) return;
 
+    const convertImageToBase64 = (image) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(image);
+      });
+    };
+
+    const base64Promises = images.map((image) => convertImageToBase64(image));
+
     const newImageURLs = [];
     images.forEach((image) => newImageURLs.push(URL.createObjectURL(image)));
 
-    this.setState((prevState) => ({
-      formData: {
-        ...prevState.formData,
-        photo: newImageURLs,
-      },
-    }));
+    Promise.all(base64Promises)
+    .then((base64Array) => {
+      const newImageURLs = images.map((image) => URL.createObjectURL(image));
+
+      // Update the component's state using setState
+      this.setState((prevState) => ({
+        formData: {
+          ...prevState.formData,
+          photo: base64Array,
+        },
+      }));
+    })
+    .catch((error) => {
+      console.error("Error converting images to base64:", error);
+    });
+
+    
   };
 
   // Function to toggle the status of a toilet type
@@ -90,22 +112,23 @@ class Form extends Component {
       // Handle form submission or API request here
       console.log("Form submitted:", formData);
       console.log(images);
-      console.log(formData);
+      alert(JSON.stringify(formData));
 
       // axios.post("http://127.0.0.1:5000/submit", formData); //"http://172.31.33.5:5000/submit"
 
       /////////////////////////////////////////////
-      const apiUrl = "https://your-api-gateway-url/resource-endpoint"; /// API gateway URL
+      
+      const apiUrl = "https://3919xnxkq7.execute-api.us-east-1.amazonaws.com/addressDB"; /// API gateway URL
       const requestData = {
         data: formData,
       };
 
-      fetch(apiUrl, {
+      fetch(apiUrl, requestData, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
+
       })
         .then((response) => response.json())
         .then((data) => {

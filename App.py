@@ -54,6 +54,7 @@ def labelDB(bidet, squat, auto, handicap, toiletID):
 def get_data():
     data = request.json
     toiletName = data['toiletName']
+    img = data['photo']
     address = data['address']
     district = data['district']
     province = data['province']
