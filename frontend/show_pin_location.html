@@ -168,10 +168,12 @@
                         content = content + "<img src=\"https://drive.google.com/uc?export=view&id=1OcYGuTp0jJfVszAaWbweS5qjVdTDIbXc\" width=\"64\" height=\"64\"> ";
                     }
                     if (item.toilet_pic) {
-                        console.log(item.toilet_pic);
-                        var image_id = item.toilet_pic.split('/d/').pop().split('/view')[0];
-                        console.log(item.toilet_pic.split('/d/').pop().split('/view')[0]);
-                        content = content + "<br><img src=\"" + "https://drive.google.com/uc?export=view&id=" + image_id + "\" style=\"max-width: 100%; height: auto;\"> ";
+                        // console.log(item.toilet_pic);
+                        // var image_id = item.toilet_pic.split('/d/').pop().split('/view')[0];
+                        // console.log(item.toilet_pic.split('/d/').pop().split('/view')[0]);
+                        // content = content + "<br><img src=\"" + "https://drive.google.com/uc?export=view&id=" + image_id + "\" style=\"max-width: 100%; height: auto;\"> ";
+                        content = content + "<br><img src=\"https://poopprom.s3.amazonaws.com/" + item.toilet_name.replace(/ /g, '') + "Pic" +"\" style=\"max-width: 100%; height: auto;\"> ";
+                         
                     }
                     console.log(content)
                     addMarker(item.location_latitude, item.location_longitude, item.toilet_name, content);
