@@ -64,29 +64,29 @@ def get_data():
         data['toiletTypes'][2]['status'],
         data['toiletTypes'][3]['status']
     )
-    # print(data)
+    print(data)
     # toiletID = nameDB(toiletName)
     # addressDB(address, district, province, zipCode, toiletID)
     # labelDB(bidet, squat, auto, handicap, toiletID)
 
     ##################################
-    try:
-        request_data = request.get_json()
+    # try:
+    #     request_data = request.get_json()
 
-        print(request_data)
+    #     print(request_data)
 
-        response = {
-            'message': 'PUT request successful',
-            'data': request_data
-        }
-        return jsonify(response), 201
+    #     response = {
+    #         'message': 'PUT request successful',
+    #         'data': request_data
+    #     }
+    #     return jsonify(response), 201
 
-    except Exception as e:
-        response = {
-            'error': 'Failed to process PUT request',
-            'message': str(e)
-        }
-        return jsonify(response), 400 
+    # except Exception as e:
+    #     response = {
+    #         'error': 'Failed to process PUT request',
+    #         'message': str(e)
+    #     }
+    #     return jsonify(response), 400 
     #########################################
 
     # return jsonify(data)
