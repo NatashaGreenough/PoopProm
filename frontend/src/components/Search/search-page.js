@@ -17,7 +17,9 @@ function Search() {
   
   useEffect(() => {
     // Replace with your API endpoint
-    fetch("http://127.0.0.1:5000/poop_prom/get_toilets")
+    const apiUrl = "https://3t9kkezy8a.execute-api.us-east-1.amazonaws.com/PrabApi"
+
+    fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
         setToilets(data);
