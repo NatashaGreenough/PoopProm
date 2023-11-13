@@ -129,8 +129,8 @@ const NostraMapComponent = ({ mapCenter, onToiletClick }) => {
               // var image_id = item.toilet_pic.split('/d/').pop().split('/view')[0];
               //console.log(item.toilet_pic.split('/d/').pop().split('/view')[0]);
               // content = content + "<br><img src=\"" + "https://drive.google.com/uc?export=view&id=" + image_id + "\" style=\"max-width: 100%; height: auto;\"> ";
-              // content = content + "<br><img src=\"https://poopprom.s3.amazonaws.com/" + item.toilet_name.replace(/ /g, '') + "Pic" +"\" style=\"max-width: 100%; height: auto;\"> ";
-              content = content + "<br><img src=\"https://poopprom.s3.amazonaws.com/an.png\" style=\"max-width: 100%; height: auto;\"> ";
+              content = content + "<br><img src=\"https://poopprom.s3.amazonaws.com/" + item.toilet_name.replace(/ /g, '') + "Pic" +"\" style=\"max-width: 100%; height: auto;\"> ";
+              // content = content + "<br><img src=\"https://poopprom.s3.amazonaws.com/an.png\" style=\"max-width: 100%; height: auto;\"> ";
 
                 
           }
