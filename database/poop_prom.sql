@@ -129,18 +129,13 @@ INSERT INTO label_info(bidet_spray, squat_toilet, auto_toilet, handicap_toilet, 
 
 
 /* Data for table pic_info */
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1O6ozVPCjOxN2OZYAIVqzMqMQiwvvy8ro/view?usp=drive_link', 1);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1CRd7fuUudXwZkG4tvdHBfNlXDN4VXtvj/view?usp=drive_link', 2);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/13mHcq5zOw6ilKiEHzBTmQjDUJbAhCyUz/view?usp=drive_link', 3);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1ea24LclOJswR32VXvx358HNFbZHeS-v0/view?usp=drive_link', 3);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/13jV13oFbSbLoVzBKSEL5_N42fXiBHPLv/view?usp=drive_link', 5);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1H3mYxSKh5Lz7vmdnGGin1tu7HIW9nBfO/view?usp=drive_link', 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1NVcaHz71CXE0rqm5V22M4gjjqLFAvKNQ/view?usp=drive_link', 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1OvXj862COYrQ0HSjeix8BbMFgiUMulqR/view?usp=drive_link', 6);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1kmptDMd-5xsjo9s7lK1_j_rOE1Fh3eS_/view?usp=drive_link', 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/10iPA4K6vFnD_fATwIG9If3h7cz83MEyY/view?usp=drive_link', 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1os-cJ5N0rJ1M96z-wMgBMU-59PVmdA6z/view?usp=drive_link', 7);
-INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('https://drive.google.com/file/d/1d7xrTrQPIa8GbiaVab3NIG4_4XQh3mWj/view?usp=drive_link', 10);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('HMPic.jpg', 1);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('ECCPic.jpg', 2);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('SuvarnabhumiAirportPic.jpg', 3);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('CentralLadpraoPic.jfif', 5);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('Terminal21Rama3Pic.jpg', 6);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('Terminal21PattayaPic.jpg', 7);
+INSERT INTO pic_info(toilet_pic, toilet_id) VALUES ('12BuildingPic.jfif', 10);
 
 
 /* Data for table ratings */
