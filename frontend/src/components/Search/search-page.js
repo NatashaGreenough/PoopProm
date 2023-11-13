@@ -3,6 +3,7 @@
 import NostraMapComponent from "./NostraMapComponent";
 import "./search.css";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 // import WebSocket from 'ws';
 
 function Search() {
@@ -18,9 +19,10 @@ function Search() {
   useEffect(() => {
     // Replace with your API endpoint
     const apiUrl = "https://3t9kkezy8a.execute-api.us-east-1.amazonaws.com/PrabApi"
+    const postData = {}
 
-    fetch(apiUrl)
-      .then((response) => response.json())
+    axios.post(apiUrl,postData)
+      .then((response) => response.data)
       .then((data) => {
         setToilets(data);
       })
